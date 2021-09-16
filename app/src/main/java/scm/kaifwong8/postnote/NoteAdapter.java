@@ -11,25 +11,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
+    private static final String TAG = "NoteAdapter";
+    private RecyclerViewClickListener recyclerViewClickListener;
+    private RecyclerViewLongClickListener recyclerViewLongClickListener;
+
     // local data here
     private ArrayList<Note> noteDataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title, content;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {   // or implement View.OnClickListener
             super(itemView);
             // link view here
             title = itemView.findViewById(R.id.txt_noteTitle);
             content = itemView.findViewById(R.id.txt_noteContent);
 
-            // define click listener for the viewHolder's view
+            // click listener here
+            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener((v) -> {
+                recyclerViewClickListener.onClick(v, getAdapterPosition());
+            });
 
+            itemView.setOnLongClickListener((v) -> {
+                recyclerViewLongClickListener.onLongClick(v, getAdapterPosition());
+                return true;
+            });
         }
+
     }
 
-    public NoteAdapter(ArrayList<Note> noteDataSet) {
+    public NoteAdapter(ArrayList<Note> noteDataSet, RecyclerViewClickListener listener) {
         this.noteDataSet = noteDataSet;
+        this.recyclerViewClickListener = listener;
     }
 
     @NonNull
@@ -48,5 +62,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return noteDataSet.size();
+    }
+
+    public interface RecyclerViewClickListener {
+        void onClick(View v, int position);
+    }
+
+    public interface RecyclerViewLongClickListener {
+        void onLongClick(View v, int position);
     }
 }
