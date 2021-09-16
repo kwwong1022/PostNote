@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Note> localNoteDataSet;
     private RecyclerView recyclerView;
     private NoteAdapter.RecyclerViewClickListener recyclerViewClickListener;
+    private NoteAdapter.RecyclerViewLongClickListener recyclerViewLongClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +31,48 @@ public class MainActivity extends AppCompatActivity {
         seedNote();
 
         // setting up the recycleView
-        setOnClickListener();
         recyclerView = findViewById(R.id.rv_notes);
-        NoteAdapter adapter = new NoteAdapter(localNoteDataSet, recyclerViewClickListener);
+        setRecyclerViewClickListener();
+        NoteAdapter adapter = new NoteAdapter(localNoteDataSet, recyclerViewClickListener, recyclerViewLongClickListener);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-
     }
 
-    private void setOnClickListener() {
+    private void setRecyclerViewClickListener() {
+        // onClick
         recyclerViewClickListener = (v, position) -> {
             Intent i = new Intent(MainActivity.this, EditNoteActivity.class);
             i.putExtra(KEY_TITLE, localNoteDataSet.get(position).getTitle());
             i.putExtra(KEY_CONTENT, localNoteDataSet.get(position).getContent());
             startActivity(i);
         };
+        // onLongClick
+        recyclerViewLongClickListener = (v, position) -> {
+            Log.d(TAG, "setRecyclerViewClickListener: long clicked");
+        };
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /** Save and restore bundle */
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     private void seedNote() {
@@ -57,15 +83,5 @@ public class MainActivity extends AppCompatActivity {
         for (Note note:localNoteDataSet) {
             note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius orci nec risus dapibus, id semper neque condimentum. Vivamus tempus lacus eu leo malesuada, vel pulvinar velit sodales. Nulla egestas lectus id tellus porta, id mattis mauris faucibus. Fusce luctus quam in lorem auctor ornare. Fusce in elementum libero, sit amet porta ligula. Suspendisse dictum lacus non elit dignissim, vel sodales dui pharetra. Donec viverra ac est a pretium. Proin id tortor id velit lobortis mollis ut quis velit. Praesent hendrerit finibus interdum. Aliquam luctus tempus sem eu tristique. Fusce imperdiet ex eget accumsan mattis. Vivamus aliquet dui id velit rhoncus cursus. Donec id hendrerit enim. Praesent eget vulputate neque. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.");
         }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }

@@ -28,7 +28,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             content = itemView.findViewById(R.id.txt_noteContent);
 
             // click listener here
-            //itemView.setOnClickListener(this);
+            // itemView.setOnClickListener(this);
             itemView.setOnClickListener((v) -> {
                 recyclerViewClickListener.onClick(v, getAdapterPosition());
             });
@@ -41,9 +41,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     }
 
-    public NoteAdapter(ArrayList<Note> noteDataSet, RecyclerViewClickListener listener) {
+    public NoteAdapter(ArrayList<Note> noteDataSet, RecyclerViewClickListener recyclerViewClickListener, RecyclerViewLongClickListener recyclerViewLongClickListener) {
         this.noteDataSet = noteDataSet;
-        this.recyclerViewClickListener = listener;
+        this.recyclerViewClickListener = recyclerViewClickListener;
+        this.recyclerViewLongClickListener = recyclerViewLongClickListener;
     }
 
     @NonNull
