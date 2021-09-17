@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,16 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // setting up toolbar
+        // initialization
         initializeToolbar();
-        // setting up data
-        seedNote();
-        // setting up the recycleView
+        seedNote(3);
+
+        // RecycleView
         recyclerView = findViewById(R.id.rv_notes);
         setRecyclerViewClickListener();
         setNoteAdapter();
 
-        // setting up floating button
+        // Floating button
         FloatingActionButton btnNewNote = findViewById(R.id.btn_newNote);
         btnNewNote.setOnClickListener((v) -> {
             Log.d(TAG, "onCreate: btn_newNote clicked");
@@ -52,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         View toolbarContextForNoteActivity = findViewById(R.id.toolbar_context_note);
         toolbarContextForNoteActivity.setAlpha(0);
         toolbarContextForNoteActivity.setEnabled(false);
+        toolbarContextForNoteActivity.setTranslationX(400);   // prevent the imgBtn with higher z-index covers other imgBtn on the bottom
+
+        ImageButton btnConnect = findViewById(R.id.img_connect);
+        btnConnect.setOnClickListener((v) -> {
+            Log.d(TAG, "initializeToolbar: btnConnect clicked");
+        });
     }
 
     private void setRecyclerViewClickListener() {
@@ -99,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    private void seedNote() {
+    private void seedNote(int times) {
         localNoteDataSet = new ArrayList<>();
-        for (int i=0; i<10; i++) {
+        for (int i=0; i<times; i++) {
             localNoteDataSet.add(new Note("Breakfast"));
             localNoteDataSet.add(new Note("To-Do"));
             localNoteDataSet.add(new Note("Assignments"));

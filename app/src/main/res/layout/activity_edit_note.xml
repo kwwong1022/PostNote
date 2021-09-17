@@ -6,19 +6,92 @@
     android:layout_height="match_parent"
     tools:context=".EditNoteActivity">
 
-    <EditText
-        android:id="@+id/editText_noteContent"
-        android:layout_width="0dp"
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"></include>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_editText_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@null"/>
+        app:layout_constraintTop_toBottomOf="@id/include">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/constraint_editText_content"
+            app:layout_constraintEnd_toEndOf="@+id/constraint_editText_content"
+            app:layout_constraintStart_toStartOf="@+id/constraint_editText_content"
+            app:layout_constraintTop_toTopOf="@+id/constraint_editText_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_editText_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/txt_noteTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:ems="10"
+                    android:maxLines="1"
+                    android:textColor="@color/black_10p"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@id/container_editText_content"
+                    app:layout_constraintStart_toStartOf="@id/container_editText_content"
+                    app:layout_constraintTop_toTopOf="@id/container_editText_content"
+                    tools:text="Title Here" />
+
+                <TextView
+                    android:id="@+id/txt_lastModified"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/black_10p"
+                    app:layout_constraintEnd_toEndOf="@id/container_editText_content"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@id/container_editText_content"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_noteTitle"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:text="empty content" />
+
+                <View
+                    android:id="@+id/editText_lineBreak"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/darker_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_lastModified" />
+
+                <EditText
+                    android:id="@+id/editText_noteContent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@null"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintBottom_toBottomOf="@id/container_editText_content"
+                    app:layout_constraintEnd_toEndOf="@id/container_editText_content"
+                    app:layout_constraintStart_toStartOf="@id/container_editText_content"
+                    app:layout_constraintTop_toBottomOf="@+id/editText_lineBreak" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
