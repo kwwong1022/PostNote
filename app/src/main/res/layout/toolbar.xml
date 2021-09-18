@@ -73,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="@id/toolbar_context_note"
             app:layout_constraintEnd_toEndOf="@id/toolbar_context_note"
             app:layout_constraintTop_toTopOf="@+id/toolbar_context_note"
-            app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+            app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -78,11 +78,13 @@
                     android:id="@+id/editText_noteContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minHeight="350dp"
                     android:layout_marginTop="8dp"
                     android:background="@null"
                     android:ems="10"
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
+                    android:fillViewport="true"
                     app:layout_constraintBottom_toBottomOf="@id/container_editText_content"
                     app:layout_constraintEnd_toEndOf="@id/container_editText_content"
                     app:layout_constraintStart_toStartOf="@id/container_editText_content"
@@ -92,6 +94,16 @@
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

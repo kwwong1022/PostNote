@@ -1,24 +1,30 @@
 package scm.kaifwong8.postnote;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
+import android.widget.ExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ConnectionDialog.ConnectionDialogListener {
     private static final String TAG = "MainActivity";
     public static final String KEY_TITLE = "title";
     public static final String KEY_CONTENT = "content";
@@ -27,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private NoteAdapter.RecyclerViewClickListener recyclerViewClickListener;
     private NoteAdapter.RecyclerViewLongClickListener recyclerViewLongClickListener;
+
+    private String hostId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,25 +63,42 @@ public class MainActivity extends AppCompatActivity {
         toolbarContextForNoteActivity.setEnabled(false);
         toolbarContextForNoteActivity.setTranslationX(400);   // prevent the imgBtn with higher z-index covers other imgBtn on the bottom
 
+        /** Connection */
         ImageButton btnConnect = findViewById(R.id.img_connect);
         btnConnect.setOnClickListener((v) -> {
             Log.d(TAG, "initializeToolbar: btnConnect clicked");
+            ConnectionDialog connectionDialog = new ConnectionDialog();
+            connectionDialog.show(getSupportFragmentManager(), "connection_dialog");
         });
     }
 
+    @Override   /** Connection */
+    public void applyTexts(String connectionId) {
+        this.hostId = connectionId;
+    }
+
     private void setRecyclerViewClickListener() {
-        // onClick
         recyclerViewClickListener = (v, position) -> {
             Log.d(TAG, "setRecyclerViewClickListener: clicked");
             Intent i = new Intent(MainActivity.this, EditNoteActivity.class);
+            // SQL?
             i.putExtra(KEY_TITLE, localNoteDataSet.get(position).getTitle());
             i.putExtra(KEY_CONTENT, localNoteDataSet.get(position).getContent());
             startActivity(i);
         };
 
-        // onLongClick
         recyclerViewLongClickListener = (v, position) -> {
             Log.d(TAG, "setRecyclerViewClickListener: " + localNoteDataSet.get(position).getTitle() + " - long clicked");
+            AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
+                    .setTitle("Delete Note")
+                    .setMessage("Do you want to delete this note?\n" + localNoteDataSet.get(position).getTitle() + ", id: " + localNoteDataSet.get(position).getId())
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        Log.d(TAG, "setRecyclerViewClickListener: Yes");
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        Log.d(TAG, "setRecyclerViewClickListener: No");
+                    }).create();
+            alertDialog.show();
         };
     }
 
@@ -84,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
+
 
 
 
