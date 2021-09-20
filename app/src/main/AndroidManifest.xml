@@ -10,7 +10,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PostNote">
+        android:theme="@style/Theme.PostNote"
+        android:usesCleartextTraffic="true">
         <activity android:name=".RequestTestingActivity"></activity>
         <activity android:name=".SplashScreenActivity">
             <intent-filter>

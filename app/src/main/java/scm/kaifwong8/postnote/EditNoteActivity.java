@@ -14,9 +14,20 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class EditNoteActivity extends AppCompatActivity implements RequestDialog.RequestDialogListener {
     private static final String TAG = "EditNoteActivity";
-    private RequestDialog.RequestDialogListener requestDialogListener;
+
+    private EditText noteContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +36,14 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
 
         TextView noteTitle = findViewById(R.id.txt_noteTitle);
         TextView noteCreatedDate = findViewById(R.id.txt_lastModified);
-        EditText noteContent = findViewById(R.id.editText_noteContent);
+        noteContent = findViewById(R.id.editText_noteContent);
 
         // Toolbar
         initializeToolbar();
 
         // get and set data
         Intent i = getIntent();
-        // SQL?
+        /** SHOULD REPLACED by SQLite */
         noteTitle.setText(i.getStringExtra(MainActivity.KEY_TITLE));
         noteCreatedDate.setText("17 Sept, 2021");
         noteContent.setText(i.getStringExtra(MainActivity.KEY_CONTENT));
@@ -42,8 +53,6 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
         requestButton.setOnClickListener((v) -> {
             RequestDialog requestDialog = new RequestDialog();
             requestDialog.show(getSupportFragmentManager(), "request_dialog");
-
-
         });
     }
 
@@ -75,11 +84,28 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
         });
     }
 
+    /** get request here */
     @Override
     public void applyTexts(String url, String method) {
         Log.d(TAG, "applyTexts: url is" + url + ", method is " + method );
 
-        /** get request here */
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) { e.printStackTrace(); }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseData = response.body().string();
+
+                    EditNoteActivity.this.runOnUiThread(() -> noteContent.append(responseData));
+                }
+            }
+        });
     }
 }

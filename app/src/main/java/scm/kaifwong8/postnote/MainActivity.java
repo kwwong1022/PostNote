@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         FloatingActionButton btnNewNote = findViewById(R.id.btn_newNote);
         btnNewNote.setOnClickListener((v) -> {
             Log.d(TAG, "onCreate: btn_newNote clicked");
+
+            Intent requestTest = new Intent(MainActivity.this, RequestTestingActivity.class);
+            startActivity(requestTest);
         });
     }
 
