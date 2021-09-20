@@ -1,6 +1,7 @@
 package scm.kaifwong8.postnote;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -11,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -21,13 +25,20 @@ import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements ConnectionDialog.ConnectionDialogListener {
+    private Random rand = new Random();
+
     private static final String TAG = "MainActivity";
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_CONTENT = "content";
+    public static final String KEY_IS_NEW = "is_new_note";
+    public static final String KEY_NOTE_POSITION = "note_position";
+    public static final String KEY_NOTE_LIST = "note_list";
 
     public static ArrayList<Note> localNoteDataSet;
     private RecyclerView recyclerView;
@@ -43,20 +54,27 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
 
         // initialization
         initializeToolbar();
-        seedNote(3);
 
-        // RecycleView
+        // load dataSet
+        localNoteDataSet = new ArrayList<>();
+        loadData();
+        // seedNote(1);
+
+        // set recycleView
         recyclerView = findViewById(R.id.rv_notes);
         setRecyclerViewClickListener();
         setNoteAdapter();
 
-        // Floating button
+        // set floating button
         FloatingActionButton btnNewNote = findViewById(R.id.btn_newNote);
         btnNewNote.setOnClickListener((v) -> {
             Log.d(TAG, "onCreate: btn_newNote clicked");
 
-            Intent requestTest = new Intent(MainActivity.this, RequestTestingActivity.class);
-            startActivity(requestTest);
+            Intent i = new Intent(MainActivity.this, EditNoteActivity.class);
+            i.putExtra(KEY_IS_NEW, true);
+            localNoteDataSet.add(new Note());
+            saveData();
+            startActivity(i);
         });
     }
 
@@ -66,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         toolbarContextForNoteActivity.setEnabled(false);
         toolbarContextForNoteActivity.setTranslationX(400);   // prevent the imgBtn with higher z-index covers other imgBtn on the bottom
 
-        /** Connection */
+        /** Multi User Connection Dialog */
         ImageButton btnConnect = findViewById(R.id.img_connect);
         btnConnect.setOnClickListener((v) -> {
             Log.d(TAG, "initializeToolbar: btnConnect clicked");
@@ -75,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         });
     }
 
-    @Override   /** Connection */
+    @Override
     public void applyTexts(String connectionId) {
         this.hostId = connectionId;
     }
@@ -85,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
             Log.d(TAG, "setRecyclerViewClickListener: clicked");
             Intent i = new Intent(MainActivity.this, EditNoteActivity.class);
             // SQL?
-            i.putExtra(KEY_TITLE, localNoteDataSet.get(position).getTitle());
-            i.putExtra(KEY_CONTENT, localNoteDataSet.get(position).getContent());
-            startActivity(i);
+            i.putExtra(KEY_IS_NEW, false);
+            i.putExtra(KEY_NOTE_POSITION, position);
+            startActivityForResult(i, 1);
         };
 
         recyclerViewLongClickListener = (v, position) -> {
@@ -97,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
                     .setMessage("Do you want to delete this note?\n" + localNoteDataSet.get(position).getTitle() + ", id: " + localNoteDataSet.get(position).getId())
                     .setPositiveButton("Yes", (dialog, which) -> {
                         Log.d(TAG, "setRecyclerViewClickListener: Yes");
+                        localNoteDataSet.remove(position);
+                        saveData();
+                        setNoteAdapter();
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         Log.d(TAG, "setRecyclerViewClickListener: No");
@@ -113,6 +134,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    private void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(localNoteDataSet);
+        editor.putString("note_list", json);
+        editor.apply();
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(KEY_NOTE_LIST, null);
+        Type type = new TypeToken<ArrayList<Note>>() {}.getType();
+        localNoteDataSet = gson.fromJson(json, type);
+    }
 
 
 
@@ -123,16 +160,18 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
 
 
 
-
-    /** Save and restore bundle */
+    /** refresh recyclerView after actions */
     @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+    protected void onResume() {
+        super.onResume();
+        setNoteAdapter();
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: called");
+        setNoteAdapter();
     }
 
     private void seedNote(int times) {
@@ -146,5 +185,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         for (Note note:localNoteDataSet) {
             note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius orci nec risus dapibus, id semper neque condimentum. Vivamus tempus lacus eu leo malesuada, vel pulvinar velit sodales. Nulla egestas lectus id tellus porta, id mattis mauris faucibus. Fusce luctus quam in lorem auctor ornare. Fusce in elementum libero, sit amet porta ligula. Suspendisse dictum lacus non elit dignissim, vel sodales dui pharetra. Donec viverra ac est a pretium. Proin id tortor id velit lobortis mollis ut quis velit. Praesent hendrerit finibus interdum. Aliquam luctus tempus sem eu tristique. Fusce imperdiet ex eget accumsan mattis. Vivamus aliquet dui id velit rhoncus cursus. Donec id hendrerit enim. Praesent eget vulputate neque. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.");
         }
+        saveData();
     }
+
 }
