@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements ConnectionDialog.ConnectionDialogListener {
-    private Random rand = new Random();
 
     private static final String TAG = "MainActivity";
     public static final String KEY_IS_NEW = "is_new_note";
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         // load dataSet
         localNoteDataSet = new ArrayList<>();
         loadData();
-        // seedNote(1);
+        // seedNote(2);
 
         // set recycleView
         recyclerView = findViewById(R.id.rv_notes);
@@ -102,10 +101,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         recyclerViewClickListener = (v, position) -> {
             Log.d(TAG, "setRecyclerViewClickListener: clicked");
             Intent i = new Intent(MainActivity.this, EditNoteActivity.class);
-            // SQL?
+            // create new note or edit note
             i.putExtra(KEY_IS_NEW, false);
             i.putExtra(KEY_NOTE_POSITION, position);
-            startActivityForResult(i, 1);
+            startActivity(i);
         };
 
         recyclerViewLongClickListener = (v, position) -> {
@@ -151,29 +150,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         localNoteDataSet = gson.fromJson(json, type);
     }
 
-
-
-
-
-
-
-
-
-
     /** refresh recyclerView after actions */
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
+        loadData();
         setNoteAdapter();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: called");
-        setNoteAdapter();
-    }
-
+    // debug function
     private void seedNote(int times) {
         localNoteDataSet = new ArrayList<>();
         for (int i=0; i<times; i++) {

@@ -101,8 +101,7 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
                             localNoteDataSet.remove(pos);
                         }
                         saveData();
-                        loadData();
-                        //onNoteDelete();
+
                         Intent i = new Intent();
                         setResult(RESULT_OK, i);
                         finish();
