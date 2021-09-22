@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar"></include>
+        layout="@layout/toolbar"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_editText_content"
@@ -35,7 +35,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp">
 
-                <TextView
+                <EditText
                     android:id="@+id/txt_noteTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -104,6 +104,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,27 +1,17 @@
 package scm.kaifwong8.postnote;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.View;
-import android.widget.ExpandableListAdapter;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,7 +20,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements ConnectionDialog.ConnectionDialogListener {
 
@@ -79,16 +68,24 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
 
     private void initializeToolbar() {
         View toolbarContextForNoteActivity = findViewById(R.id.toolbar_context_note);
+        View toolbarContextForDrawActivity = findViewById(R.id.toolbar_context_draw);
         toolbarContextForNoteActivity.setAlpha(0);
         toolbarContextForNoteActivity.setEnabled(false);
         toolbarContextForNoteActivity.setTranslationX(400);   // prevent the imgBtn with higher z-index covers other imgBtn on the bottom
+        toolbarContextForDrawActivity.setAlpha(0);
+        toolbarContextForDrawActivity.setEnabled(false);
+        toolbarContextForDrawActivity.setTranslationX(400);
 
         /** Multi User Connection Dialog */
-        ImageButton btnConnect = findViewById(R.id.img_connect);
-        btnConnect.setOnClickListener((v) -> {
-            Log.d(TAG, "initializeToolbar: btnConnect clicked");
-            ConnectionDialog connectionDialog = new ConnectionDialog();
-            connectionDialog.show(getSupportFragmentManager(), "connection_dialog");
+        ImageButton btnDraw = findViewById(R.id.img_draw);
+        btnDraw.setOnClickListener((v) -> {
+            Log.d(TAG, "initializeToolbar: btnDraw clicked");
+
+            Intent i = new Intent(MainActivity.this, DrawActivity.class);
+            startActivity(i);
+            // disabled function: connection
+//            ConnectionDialog connectionDialog = new ConnectionDialog();
+//            connectionDialog.show(getSupportFragmentManager(), "connection_dialog");
         });
     }
 
@@ -133,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void saveData() {
+    public void saveData() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();

@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.Button;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
     private boolean isNew = false;
     private int pos;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +49,7 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
         localNoteDataSet = new ArrayList<>();
         loadData();
 
-        TextView noteTitle = findViewById(R.id.txt_noteTitle);
+        EditText noteTitle = findViewById(R.id.txt_noteTitle);
         TextView noteCreatedDate = findViewById(R.id.txt_lastModified);
         noteContent = findViewById(R.id.editText_noteContent);
 
@@ -54,7 +58,7 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
 
         // get and set data
         Intent i = getIntent();
-        /** SHOULD REPLACED by SQLite */
+        // check if super activity intent to create new or edit note
         if (i.getBooleanExtra(MainActivity.KEY_IS_NEW, false)) {
             isNew = true;
             noteTitle.setText("");
@@ -66,6 +70,28 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
             noteCreatedDate.setText(localNoteDataSet.get(pos).getLastModified());
             noteContent.setText(localNoteDataSet.get(pos).getContent());
         }
+        // on title or content text change
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d(TAG, "afterTextChanged: triggered");
+                localNoteDataSet.get(pos).setTitle(noteTitle.getText().toString());
+                localNoteDataSet.get(pos).setContent(noteContent.getText().toString());
+                saveData();
+            }
+        };
+        noteTitle.addTextChangedListener(textWatcher);
+        noteContent.addTextChangedListener(textWatcher);
 
         // trigger http request dialog
         FloatingActionButton requestButton = findViewById(R.id.btn_request);
@@ -76,12 +102,15 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
     }
 
     private void initializeToolbar() {
-        ImageButton btnConnect = findViewById(R.id.img_connect);
+        View toolbarContextForDrawActivity = findViewById(R.id.toolbar_context_draw);
+        toolbarContextForDrawActivity.setAlpha(0);
+        toolbarContextForDrawActivity.setEnabled(false);
+        toolbarContextForDrawActivity.setTranslationX(400);
+        ImageButton btnDraw = findViewById(R.id.img_draw);
         ImageButton btnExit = findViewById(R.id.img_exit);
         ImageButton btnDelete = findViewById(R.id.img_delete);
-
-        btnConnect.setAlpha(0);
-        btnConnect.setEnabled(false);
+        btnDraw.setAlpha(0);
+        btnDraw.setEnabled(false);
 
         btnExit.setOnClickListener((v) -> {
             Log.d(TAG, "initializeToolbar: btnExit clicked");
@@ -153,5 +182,12 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
                 }
             }
         });
+    }
+
+    /** gesture function here */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        return super.onTouchEvent(event);
     }
 }

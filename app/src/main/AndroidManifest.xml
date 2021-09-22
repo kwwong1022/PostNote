@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PostNote"
         android:usesCleartextTraffic="true">
-        <activity android:name=".RequestTestingActivity"></activity>
+        <activity android:name=".DrawActivity"></activity>
+        <activity android:name=".RequestTestingActivity" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

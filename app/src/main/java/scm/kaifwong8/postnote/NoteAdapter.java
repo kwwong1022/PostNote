@@ -38,7 +38,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 return true;
             });
         }
-
     }
 
     public NoteAdapter(ArrayList<Note> noteDataSet, RecyclerViewClickListener recyclerViewClickListener, RecyclerViewLongClickListener recyclerViewLongClickListener) {

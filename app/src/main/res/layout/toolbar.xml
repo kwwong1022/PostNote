@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/img_connect"
+            android:id="@+id/img_draw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -41,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="@id/toolbar_context_main"
             app:layout_constraintEnd_toEndOf="@id/toolbar_context_main"
             app:layout_constraintTop_toTopOf="@+id/toolbar_context_main"
-            app:srcCompat="@drawable/ic_baseline_wifi_tethering_24" />
+            app:srcCompat="@drawable/ic_baseline_draw_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,6 +74,28 @@
             app:layout_constraintEnd_toEndOf="@id/toolbar_context_note"
             app:layout_constraintTop_toTopOf="@+id/toolbar_context_note"
             app:srcCompat="@drawable/ic_baseline_delete_forever_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar_context_draw"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/img_draw_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_context_draw"
+            app:layout_constraintStart_toStartOf="@+id/toolbar_context_draw"
+            app:layout_constraintTop_toTopOf="@+id/toolbar_context_draw"
+            app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
