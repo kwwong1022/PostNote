@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         // load dataSet
         localNoteDataSet = new ArrayList<>();
         loadData();
-        // seedNote(2);
+        // seedNote(3);
 
         // set recycleView
         recyclerView = findViewById(R.id.rv_notes);

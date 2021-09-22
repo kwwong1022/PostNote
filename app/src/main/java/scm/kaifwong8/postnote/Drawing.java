@@ -40,8 +40,6 @@ public class Drawing extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
         for (StrokePath path : paths) {
             canvas.drawPath(path.getPath(), path.getP());
         }
