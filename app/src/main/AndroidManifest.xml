@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PostNote"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DrawActivity"></activity>
+        <activity android:name=".MultiEditNoteActivity"></activity>
+        <activity android:name=".DrawActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

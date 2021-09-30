@@ -3,11 +3,14 @@ package scm.kaifwong8.postnote;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,10 +31,18 @@ public class ConnectionDialog extends AppCompatDialogFragment {
 
         builder.setView(view)
                 .setPositiveButton("Connect", (dialog, which) -> {
-                    Log.d(TAG, "onCreateDialog: Connect");
+                    Log.d(TAG, "onCreateDialog: Connect, hostId is " + connectionId.getText().toString());
                     String id = connectionId.getText().toString();
                     dialogListener.applyTexts(id);
-                    Log.d(TAG, "onCreateDialog: hostId is " + id);
+
+                    if (id.contains(" ")) {
+                        Toast.makeText(getContext(), "id should not contain empty space", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent i = new Intent(getActivity(), MultiEditNoteActivity.class);
+                        i.putExtra("id", id);
+                        startActivity(i);
+                    }
+
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> {
                     Log.d(TAG, "onCreateDialog: Cancel");

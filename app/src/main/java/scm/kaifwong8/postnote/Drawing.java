@@ -1,6 +1,7 @@
 package scm.kaifwong8.postnote;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,21 +14,26 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Drawing extends View {
     private static final String TAG = "Drawing";
 
     private boolean first;
-    private boolean inSetting;
     private Paint p;
     private ArrayList<StrokePath> paths;
     private int currColor;
 
     public Drawing(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.first = true;
         this.paths = new ArrayList<>();
+        this.first = true;
         this.currColor = 6;
         this.p = new Paint();
         this.p.setStrokeWidth(3);
@@ -54,7 +60,7 @@ public class Drawing extends View {
     public boolean onTouchEvent(MotionEvent event) {
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            Log.d(TAG, "onTouchEvent: Up");
+            // Log.d(TAG, "onTouchEvent: Up");
             this.first = true;
 
             if (event.getY() < (getHeight()-getHeight()/9)+getWidth()/22 && event.getY() > (getHeight()-getHeight()/9)-getWidth()/22) {
@@ -62,7 +68,9 @@ public class Drawing extends View {
 
                 // undo
                 if (event.getX() < (getWidth()/8)+getWidth()/17 && event.getX() > (getWidth()/8)-getWidth()/17) {
-                    paths.clear();
+                    if (paths.size() > 0) {
+                        paths.clear();
+                    }
                 }
 
                 // color
@@ -88,7 +96,7 @@ public class Drawing extends View {
             }
 
         } else {
-            Log.d(TAG, "onTouchEvent: Down");
+            // Log.d(TAG, "onTouchEvent: Down");
             if (this.first) {
                 Log.d(TAG, "onTouchEvent: added new path");
                 paths.add(new StrokePath(new Path(), p));
@@ -158,5 +166,9 @@ public class Drawing extends View {
         } else {
             canvas.drawCircle(getWidth() - ((getWidth() / 8) * 6f), getHeight() - getHeight() / 9, getWidth() / 26, mcP);
         }
+    }
+
+    public ArrayList<StrokePath> getPaths () {
+        return this.paths;
     }
 }

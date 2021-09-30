@@ -190,4 +190,10 @@ public class EditNoteActivity extends AppCompatActivity implements RequestDialog
 
         return super.onTouchEvent(event);
     }
+
+    public void toggleViewIndex() {
+        if (noteContent.getZ() == 1) {
+
+        }
+    }
 }

@@ -42,6 +42,18 @@
             app:layout_constraintEnd_toEndOf="@id/toolbar_context_main"
             app:layout_constraintTop_toTopOf="@+id/toolbar_context_main"
             app:srcCompat="@drawable/ic_baseline_draw_24" />
+
+        <ImageButton
+            android:id="@+id/img_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar_context_main"
+            app:layout_constraintEnd_toStartOf="@+id/img_draw"
+            app:layout_constraintTop_toTopOf="@+id/toolbar_context_main"
+            app:srcCompat="@drawable/ic_baseline_wifi_tethering_24" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

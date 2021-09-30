@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
     private RecyclerView recyclerView;
     private NoteAdapter.RecyclerViewClickListener recyclerViewClickListener;
     private NoteAdapter.RecyclerViewLongClickListener recyclerViewLongClickListener;
+    private SharedPreferences sharedPreferences;
 
     private String hostId;
 
@@ -44,9 +45,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
         initializeToolbar();
 
         // load dataSet
+        this.sharedPreferences = getSharedPreferences("shared_preferences", MODE_PRIVATE);
         localNoteDataSet = new ArrayList<>();
         loadData();
-        // seedNote(3);
+        if (sharedPreferences.getString(KEY_NOTE_LIST, null) == null) {
+            seedNote();
+        }
+
 
         // set recycleView
         recyclerView = findViewById(R.id.rv_notes);
@@ -83,9 +88,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
 
             Intent i = new Intent(MainActivity.this, DrawActivity.class);
             startActivity(i);
+
+        });
+
+        ImageButton btnConnect = findViewById(R.id.img_connect);
+        btnConnect.setOnClickListener((v) -> {
+            Log.d(TAG, "initializeToolbar: btnConnect clicked");
+
             // disabled function: connection
-//            ConnectionDialog connectionDialog = new ConnectionDialog();
-//            connectionDialog.show(getSupportFragmentManager(), "connection_dialog");
+            ConnectionDialog connectionDialog = new ConnectionDialog();
+            connectionDialog.show(getSupportFragmentManager(), "connection_dialog");
         });
     }
 
@@ -157,16 +169,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionDialog.
     }
 
     // debug function
-    private void seedNote(int times) {
+    private void seedNote() {
         localNoteDataSet = new ArrayList<>();
-        for (int i=0; i<times; i++) {
-            localNoteDataSet.add(new Note("Breakfast"));
-            localNoteDataSet.add(new Note("To-Do"));
-            localNoteDataSet.add(new Note("Assignments"));
-        }
+        localNoteDataSet.add(new Note("Welcome to PostNote"));
 
         for (Note note:localNoteDataSet) {
-            note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur varius orci nec risus dapibus, id semper neque condimentum. Vivamus tempus lacus eu leo malesuada, vel pulvinar velit sodales. Nulla egestas lectus id tellus porta, id mattis mauris faucibus. Fusce luctus quam in lorem auctor ornare. Fusce in elementum libero, sit amet porta ligula. Suspendisse dictum lacus non elit dignissim, vel sodales dui pharetra. Donec viverra ac est a pretium. Proin id tortor id velit lobortis mollis ut quis velit. Praesent hendrerit finibus interdum. Aliquam luctus tempus sem eu tristique. Fusce imperdiet ex eget accumsan mattis. Vivamus aliquet dui id velit rhoncus cursus. Donec id hendrerit enim. Praesent eget vulputate neque. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.");
+            note.setContent("Click to edit new note");
         }
         saveData();
     }
