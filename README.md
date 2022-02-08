@@ -26,3 +26,6 @@ This function is achieved by using an express server, there are two get request 
 This function is like a memo for users to jot down their ideas. Users can draw on it by hand, and change the color as they want.
 
 This function is created using customView. Each stroke from the user will be saved to an arraylist in onTouch, then every time the onDraw method is called, those strokes will be redrawn on the canvas.
+
+<h3>Download</h3>
+./app-debug.apk
