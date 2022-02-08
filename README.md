@@ -15,6 +15,8 @@ There are 4 main functions in this application, which are:
 <h3>Get request: (okhttp library)</h3> 
 <p>After the user enters the edit note activity, the user can edit text content normally or click on the floating button with a ‘+’ symbol to insert content from the url. Then a dialog box will pop up asking the user to insert a url link. After clicking the get button, content from the url link will append at the end of the edit text.</p>
 
+<img src="https://images.squarespace-cdn.com/content/v1/5c12933f365f02733c923e4e/1548122952769-NT7MU80B6XUGJ3OOPWUN/bland.png?format=750w" width="200px">
+
 <p>Since getting requests is different from getting HTTP content from the internet, in order to get requests from the internet, okHttp is used as an HTTP client to get data.</p>
 <br>
 
