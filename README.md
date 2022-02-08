@@ -8,7 +8,7 @@ There are 4 main functions in this application, which are:
 2. getting request content
 3. drawing board.
 
-<h2>Note-taking:</h2> (GSON, sharedPreferences)
+<h3>Note-taking:</h3> (GSON, sharedPreferences)
 This is the basic function of this application, users can create new notes, edit it and get notes saved into the local memory. All save & load methods are inserted carefully in the app lifecycle to prevent any bugs from happening, for example like onDestroy triggered by rotating screen.
 
 There is a problem that I encountered, I found that sharePreferences can only be used to save primitive type data. Types like arraylist are not accepted, then I found a GSON library by google, we can use it to serialize arraylist data to string so that I can save those arraylist note data into sharePreferences. <arraylist>
