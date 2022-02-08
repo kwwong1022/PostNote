@@ -10,7 +10,7 @@ There are 4 main functions in this application, which are:
 <br>
 <h3>Note-taking: (GSON, sharedPreferences)</h3> 
 <p>This is the basic function of this application, users can create new notes, edit it and get notes saved into the local memory.</p>
-<br><br>
+<br>
 
 <h3>Get request: (okhttp library)</h3> 
 <p>After the user enters the edit note activity, the user can edit text content normally or click on the floating button with a ‘+’ symbol to insert content from the url. Then a dialog box will pop up asking the user to insert a url link. After clicking the get button, content from the url link will append at the end of the edit text.</p>
