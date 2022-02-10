@@ -1,9 +1,9 @@
 # PostNote
 
-Post Note is an android note taking application with online editing function.
+Post Note is an android note taking application with online editing, drawing and drawing functions.
 
 
-There are 4 main functions in this application, which are:
+There are 4 core functions in this application:
 1. note-taking
 2. getting request content
 3. drawing board.
